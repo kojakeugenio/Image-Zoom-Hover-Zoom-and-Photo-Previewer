@@ -19,29 +19,29 @@
 
 ---
 
-## 🌟 Overview
+## Overview
 
-**Image Zoom+** is a high-performance browser extension that displays high-resolution overlays of images and videos when you hover your cursor over thumbnails, links, or media grids. 
+Image Zoom+ is a high-performance browser extension that displays high-resolution overlays of images and videos when you hover your cursor over thumbnails, links, or media grids.
 
 If you are looking for a weightless, modern, and privacy-focused alternative to legacy extensions like *Hover Zoom* or *Imagus*, Image Zoom+ offers clean execution, local scripts, zero remote tracking, and smooth web performance.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-*   **🔍 Instant Hover Previews:** Hover over any thumbnail or media link (on Reddit, Twitter, Wikipedia, Amazon, etc.) to view the original full-size media immediately in an overlay.
-*   **🖱️ Scroll to Zoom:** Dynamically zoom in and out (from `0.5x` up to `10x`) using your mouse scroll wheel while hovering over the preview.
-*   **📐 Drag to Resize & Aspect Ratio Lock:** Click and drag any corner or border of the preview window to resize it. The window automatically locks and preserves the correct media aspect ratio.
-*   **📌 Drag & Pin (Positioning):** Press **P** or click the Pin button on the overlay to lock it in place. Drag it anywhere on the screen via its top bar.
-*   **✋ Drag to Pan:** Easily click and drag inside the preview overlay to navigate and inspect extra-large images.
-*   **📊 Real-time Stats Counter:** Keep track of your usage! View total previews zoomed today and all-time directly from the extension settings popup.
-*   **⏱️ Preload Countdown Visuals:** Custom hover delays display a non-intrusive countdown toast (*"Opening in X.Xs"*), preventing accidental triggers when scrolling grids.
-*   **📊 Metadata HUD Bar:** View file details instantly, including exact dimensions, file type, file size, and the host domain.
-*   **🖼️ Smart Upscaling:** Automatically scales up tiny low-res assets (under 400x300px) with crisp CSS rules, avoiding pixelation.
+*   **Instant Hover Previews:** Hover over any thumbnail or media link (on Reddit, Twitter, Wikipedia, Amazon, etc.) to view the original full-size media immediately in an overlay.
+*   **Scroll to Zoom:** Dynamically zoom in and out (from `0.5x` up to `10x`) using your mouse scroll wheel while hovering over the preview.
+*   **Drag to Resize & Aspect Ratio Lock:** Click and drag any corner or border of the preview window to resize it. The window automatically locks and preserves the correct media aspect ratio.
+*   **Drag & Pin (Positioning):** Press **P** or click the Pin button on the overlay to lock it in place. Drag it anywhere on the screen via its top bar.
+*   **Drag to Pan:** Easily click and drag inside the preview overlay to navigate and inspect extra-large images.
+*   **Real-time Stats Counter:** Keep track of your usage! View total previews zoomed today and all-time directly from the extension settings popup.
+*   **Preload Countdown Visuals:** Custom hover delays display a non-intrusive countdown toast (*"Opening in X.Xs"*), preventing accidental triggers when scrolling grids.
+*   **Metadata HUD Bar:** View file details instantly, including exact dimensions, file type, file size, and the host domain.
+*   **Smart Upscaling:** Automatically scales up tiny low-res assets (under 400x300px) with crisp CSS rules, avoiding pixelation.
 
 ---
 
-## ⚡ Smart Source Pipeline
+## Smart Source Pipeline
 
 Image Zoom+ doesn't just stretch thumbnails. It resolves the highest quality version of an image in the background:
 - **CDN Parameter Stripping:** Automatically removes transformation and cropping parameters from Google CDN, Amazon, and other major hosts.
@@ -50,7 +50,7 @@ Image Zoom+ doesn't just stretch thumbnails. It resolves the highest quality ver
 
 ---
 
-## ⌨️ Action Bar & Hotkeys
+## Action Bar & Hotkeys
 
 While hovering over a preview, perform quick actions using these key combinations:
 
@@ -65,7 +65,7 @@ While hovering over a preview, perform quick actions using these key combination
 
 ---
 
-## 🛠️ Local Installation & Development
+## Local Installation & Development
 
 Since this extension runs entirely locally, you can easily load it into your Chrome-based browser:
 
@@ -77,7 +77,7 @@ Since this extension runs entirely locally, you can easily load it into your Chr
 
 ---
 
-## 🔒 100% Private & Open Source
+## Privacy & Security
 
 - **No Remote Servers:** All media fetching and analysis happen directly on your machine.
 - **No Analytics/Tracking:** Your statistics are stored entirely locally in Chrome's local storage and are never uploaded.
@@ -85,6 +85,6 @@ Since this extension runs entirely locally, you can easily load it into your Chr
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
