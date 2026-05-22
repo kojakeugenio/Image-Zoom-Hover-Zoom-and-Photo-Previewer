@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Image Zoom+ | Hover Zoom & Photo Previewer",
+  "version": "1.0.0",
+  "description": "Instantly preview full-resolution images on hover. Scroll to zoom, resolve srcset & lazy sources automatically.",
+  "author": "kojak",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Image Zoom+ Settings"
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content.js"],
+      "css": ["src/content/content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/content.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

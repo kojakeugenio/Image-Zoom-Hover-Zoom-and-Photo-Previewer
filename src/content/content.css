@@ -1,0 +1,544 @@
+/* ============================================================
+   HoverLens — Content Overlay Styles
+   ============================================================ */
+
+:root {
+  --hl-accent-from: #7c3aed;
+  --hl-accent-to: #06b6d4;
+  --hl-bg: rgba(10, 11, 20, 0.92);
+  --hl-border: rgba(255, 255, 255, 0.12);
+  --hl-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --hl-radius: 14px;
+  --hl-transition: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  --hl-origin-x: 50%;
+  --hl-origin-y: 50%;
+}
+
+/* ── Dimmer backdrop ───────────────────────────────────────── */
+#hl-dimmer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483645;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  backdrop-filter: blur(0px) saturate(100%);
+  -webkit-backdrop-filter: blur(0px) saturate(100%);
+  transition: background 250ms ease, backdrop-filter 250ms ease, -webkit-backdrop-filter 250ms ease;
+}
+
+#hl-dimmer.hl-dim-active {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+#hl-dimmer.hl-glass-active {
+  background: rgba(8, 20, 48, var(--hl-glass-opacity, 0.35)); /* Translucent glass tint */
+  backdrop-filter: blur(var(--hl-blur-radius, 12px)) saturate(130%);
+  -webkit-backdrop-filter: blur(var(--hl-blur-radius, 12px)) saturate(130%);
+}
+
+/* ── Main overlay container ────────────────────────────────── */
+#hl-overlay {
+  position: fixed;
+  z-index: 2147483646;
+  max-width: 82vw;
+  max-height: 82vh;
+  min-width: 250px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--hl-bg);
+  border: 1px solid var(--hl-border);
+  border-radius: var(--hl-radius);
+  box-shadow: var(--hl-shadow);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  pointer-events: auto;
+  opacity: 0;
+  transform: scale(0.15);
+  transform-origin: var(--hl-origin-x) var(--hl-origin-y);
+  transition:
+    opacity var(--hl-transition),
+    transform var(--hl-transition);
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+/* ── Custom Resizers ───────────────────────────────────────── */
+.hl-resizer {
+  position: absolute;
+  z-index: 100;
+  background: transparent;
+}
+
+#hl-resizer-r {
+  top: 0;
+  right: -4px;
+  width: 10px;
+  height: 100%;
+  cursor: e-resize;
+}
+
+#hl-resizer-b {
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  cursor: s-resize;
+}
+
+#hl-resizer-rb {
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  cursor: se-resize;
+}
+
+#hl-overlay.hl-visible {
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: var(--hl-origin-x) var(--hl-origin-y);
+}
+
+/* ── Manual Resizing State ─────────────────────────────────── */
+#hl-overlay.hl-resized {
+  align-items: stretch;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+#hl-overlay.hl-resized #hl-img-wrap {
+  flex-grow: 1;
+  height: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+#hl-overlay.hl-resized #hl-image,
+#hl-overlay.hl-resized #hl-video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* ── Top bar (title + close) ───────────────────────────────── */
+#hl-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 6px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* When pinned, show move cursor on the topbar */
+#hl-overlay.hl-is-pinned #hl-topbar {
+  cursor: move;
+}
+
+#hl-topbar-label {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+#hl-close-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 150ms, color 150ms;
+  flex-shrink: 0;
+}
+
+#hl-close-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+#hl-pin-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 150ms, color 150ms, transform 150ms, box-shadow 150ms;
+  flex-shrink: 0;
+}
+
+#hl-pin-btn svg {
+  width: 10px;
+  height: 10px;
+  stroke-width: 2.5;
+  display: block;
+}
+
+#hl-pin-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+#hl-pin-btn.hl-pinned {
+  background: linear-gradient(135deg, var(--hl-accent-from, #7c3aed), var(--hl-accent-to, #06b6d4));
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
+}
+
+#hl-pin-btn.hl-pinned:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.6);
+}
+
+/* ── Image wrapper ─────────────────────────────────────────── */
+#hl-img-wrap {
+  position: relative;
+  overflow: hidden;
+  max-width: 82vw;
+  max-height: calc(82vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  user-select: none;
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+#hl-image, #hl-video {
+  display: block;
+  max-width: 100%;
+  max-height: calc(82vh - 80px);
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform 120ms ease-out;
+}
+
+#hl-image {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ── Loading spinner ───────────────────────────────────────── */
+#hl-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(124, 58, 237, 0.2);
+  border-top-color: var(--hl-accent-from);
+  border-radius: 50%;
+  animation: hl-spin 0.7s linear infinite;
+  position: absolute;
+}
+
+@keyframes hl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Action bar ────────────────────────────────────────────── */
+#hl-action-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  gap: 6px;
+}
+
+.hl-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.7);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms, color 150ms, border-color 150ms, transform 100ms;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hl-action-btn:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.6);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.hl-action-btn:active {
+  transform: translateY(0);
+}
+
+.hl-action-btn svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+#hl-zoom-display {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  padding: 4px 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
+
+/* ── Image info bar — absolute overlay inside #hl-img-wrap ── */
+#hl-info-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  pointer-events: none; /* never blocks pan/zoom interactions */
+}
+
+.hl-info-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(10, 10, 12, 0.85); /* high contrast deep dark background */
+  border: 1px solid rgba(255, 255, 255, 0.16); /* crisp white-border contrast */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1); /* physical glass layer shadow */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff; /* pure white text for maximum readability */
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+.hl-info-chip svg {
+  width: 11px;
+  height: 11px;
+  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.7); /* elegant bright gray matching the value */
+  flex-shrink: 0;
+}
+
+.hl-info-chip span {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Domain chip — truncate long hostnames */
+#hl-info-domain {
+  overflow: hidden;
+  max-width: 160px;
+}
+
+#hl-info-domain span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+
+/* ── Copied feedback ───────────────────────────────────────── */
+#hl-copy-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  z-index: 2147483647;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: rgba(10, 10, 12, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms, transform 200ms;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+#hl-copy-toast.hl-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Hotkey-held toast ─────────────────────────────────────── */
+#hl-disabled-badge {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  z-index: 2147483647;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px 9px 14px;
+  border-radius: 40px;
+  background: rgba(10, 11, 20, 0.92);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: rgba(240, 241, 255, 0.75);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 58, 237, 0.15);
+  white-space: nowrap;
+}
+
+#hl-disabled-badge.hl-badge-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Pulsing dot */
+#hl-disabled-badge .hl-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  animation: hl-pulse 1.2s ease-in-out infinite;
+}
+
+/* "HoverLens" brand text in accent gradient */
+#hl-disabled-badge .hl-badge-brand {
+  background: linear-gradient(90deg, #7c3aed, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Separator */
+#hl-disabled-badge .hl-badge-sep {
+  opacity: 0.3;
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Hotkey chip */
+#hl-disabled-badge kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+@keyframes hl-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+/* ── Loading Toast ─────────────────────────────────────────── */
+#hl-loading-toast {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(10px) !important;
+  z-index: 2147483647 !important;
+  padding: 8px 18px !important;
+  border-radius: 12px !important;
+  background: rgba(30, 30, 32, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 200ms, transform 200ms !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+#hl-loading-toast.hl-toast-show {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.hl-loading-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hl-loading-toast-brand {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+}
+
+.hl-loading-toast-sep {
+  opacity: 0.35;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.hl-loading-toast-status {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.hl-loading-toast-status strong {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 600 !important;
+}

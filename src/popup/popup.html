@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Zoom+ Settings</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body class="theme-dark">
+
+  <!-- HEADER -->
+  <header class="hl-header">
+    <div class="hl-logo">
+      <img src="hoverlens-icon.png" class="hl-logo-icon hl-logo-img" alt="Image Zoom+" />
+      <div>
+        <span class="hl-logo-name">Image Zoom+</span>
+        <span class="hl-logo-tagline">Image Zoom Extension</span>
+      </div>
+    </div>
+    <div class="hl-header-right">
+      <button class="hl-theme-btn" id="hl-about-btn" title="About Developer">
+        <span style="display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </span>
+      </button>
+      <button class="hl-theme-btn" id="hl-theme-btn" title="Toggle light/dark">
+        <span id="hl-theme-icon" style="display: flex; align-items: center; justify-content: center;"></span>
+      </button>
+      <div class="hl-master-toggle">
+        <span class="hl-master-label" id="hl-master-label">ON</span>
+        <label class="hl-switch" title="Enable or disable Image Zoom+ globally">
+          <input type="checkbox" id="hl-master-switch" checked />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="hl-body">
+
+    <!-- USAGE -->
+    <div class="hl-section-title">Usage</div>
+    <div class="hl-stats-card">
+      <div class="hl-stats-grid">
+        <div class="hl-stat-item">
+          <div class="hl-stat-left">
+            <svg class="hl-stat-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="hl-stat-label">Today</span>
+          </div>
+          <span class="hl-stat-value" id="hl-stat-today">0</span>
+        </div>
+        <div class="hl-stat-item">
+          <div class="hl-stat-left">
+            <svg class="hl-stat-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span class="hl-stat-label">All Time</span>
+          </div>
+          <span class="hl-stat-value" id="hl-stat-total">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="hl-sub-desc">Image previews</div>
+
+    <!-- ZOOM -->
+    <div class="hl-section-title">Zoom</div>
+    <div class="hl-card">
+      <div class="hl-interactive-row" data-target="hl-zoom-collapse">
+        <span class="hl-row-label">Default zoom on open</span>
+        <div class="hl-row-right">
+          <span class="hl-pill" id="hl-zoom-val">1.0×</span>
+          <svg class="hl-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div class="hl-collapse-drawer" id="hl-zoom-collapse">
+        <div class="hl-drawer-inner">
+          <input type="range" class="hl-range" id="hl-zoom-range" min="0.5" max="3" step="0.1" value="1.0" />
+        </div>
+      </div>
+
+      <div class="hl-interactive-row" data-target="hl-maxzoom-collapse">
+        <span class="hl-row-label">Max zoom (zoom cap)</span>
+        <div class="hl-row-right">
+          <span class="hl-pill" id="hl-maxzoom-val">5.0×</span>
+          <svg class="hl-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div class="hl-collapse-drawer" id="hl-maxzoom-collapse">
+        <div class="hl-drawer-inner">
+          <input type="range" class="hl-range" id="hl-maxzoom-range" min="2" max="10" step="0.5" value="5" />
+        </div>
+      </div>
+
+      <div class="hl-row">
+        <div class="hl-row-info">
+          <span class="hl-row-label">Remember last zoom</span>
+          <span class="hl-row-desc">Keep your last zoom level across different images</span>
+        </div>
+        <label class="hl-switch">
+          <input type="checkbox" id="hl-sticky-zoom" />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- TRIGGER -->
+    <div class="hl-section-title">Trigger</div>
+    <div class="hl-card">
+      <div class="hl-interactive-row" data-target="hl-delay-collapse">
+        <span class="hl-row-label">Hover delay</span>
+        <div class="hl-row-right">
+          <span class="hl-pill" id="hl-delay-val">350ms</span>
+          <svg class="hl-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div class="hl-collapse-drawer" id="hl-delay-collapse">
+        <div class="hl-drawer-inner">
+          <input type="range" class="hl-range" id="hl-delay-range" min="0" max="800" step="50" value="350" />
+        </div>
+      </div>
+
+      <div class="hl-interactive-row" data-target="hl-opendelay-collapse">
+        <span class="hl-row-label">Open delay</span>
+        <div class="hl-row-right">
+          <span class="hl-pill" id="hl-opendelay-val">0ms</span>
+          <svg class="hl-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div class="hl-collapse-drawer" id="hl-opendelay-collapse">
+        <div class="hl-drawer-inner">
+          <input type="range" class="hl-range" id="hl-opendelay-range" min="0" max="2000" step="100" value="0" />
+        </div>
+      </div>
+
+      <div class="hl-row">
+        <div class="hl-row-info">
+          <span class="hl-row-label">Skip small images</span>
+          <span class="hl-row-desc">Ignore images smaller than 50×50 px</span>
+        </div>
+        <label class="hl-switch">
+          <input type="checkbox" id="hl-skip-small" checked />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- KEYBOARD -->
+    <div class="hl-section-title">Keyboard</div>
+    <div class="hl-card">
+      <div class="hl-row">
+        <div class="hl-row-info">
+          <span class="hl-row-label">Disable hotkey (hold)</span>
+          <span class="hl-row-desc">Hold this key to suppress zoom temporarily</span>
+        </div>
+        <span class="hl-key-badge" id="hl-key-badge" title="Click to change key">X</span>
+      </div>
+    </div>
+
+    <!-- APPEARANCE -->
+    <div class="hl-section-title">Appearance</div>
+    <div class="hl-card">
+      <div class="hl-row">
+        <div class="hl-row-info">
+          <span class="hl-row-label">Dim background</span>
+          <span class="hl-row-desc">Darkens the page behind the overlay</span>
+        </div>
+        <label class="hl-switch">
+          <input type="checkbox" id="hl-dim-bg" checked />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+      <div class="hl-row">
+        <div class="hl-row-info">
+          <span class="hl-row-label">Glass blur</span>
+          <span class="hl-row-desc">Frosted translucent background blur</span>
+        </div>
+        <label class="hl-switch">
+          <input type="checkbox" id="hl-glass-blur" />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+      <div class="hl-slider-row">
+        <span class="hl-slider-label">Max overlay size</span>
+        <div class="hl-segment" id="hl-size-seg">
+          <button class="hl-seg-btn" data-val="60">S</button>
+          <button class="hl-seg-btn active" data-val="82">M</button>
+          <button class="hl-seg-btn" data-val="92">L</button>
+          <button class="hl-seg-btn" data-val="98">Full</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- THIS SITE -->
+    <div class="hl-section-title">This Site</div>
+    <div class="hl-card">
+      <div class="hl-row">
+        <div class="hl-row-left">
+          <svg class="hl-site-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="hl-site-domain" id="hl-current-domain">—</span>
+        </div>
+        <label class="hl-switch" title="Disable Image Zoom+ on this site">
+          <input type="checkbox" id="hl-site-toggle" checked />
+          <span class="hl-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- BLOCKED SITES -->
+    <div class="hl-section-title">Blocked Sites</div>
+    <div class="hl-card">
+      <div class="hl-interactive-row" data-target="hl-blocked-collapse">
+        <div class="hl-row-left">
+          <svg class="hl-site-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          <span class="hl-row-label" id="hl-blocked-label">No blocked sites</span>
+        </div>
+        <div class="hl-row-right">
+          <svg class="hl-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+      <div class="hl-collapse-drawer" id="hl-blocked-collapse">
+        <div class="hl-drawer-inner" style="padding-top: 0; padding-bottom: 8px;">
+          <div class="hl-blocked-add-row" style="display: flex; gap: 8px; margin: 8px 16px 12px 16px;">
+            <input type="text" id="hl-blocked-input" placeholder="e.g. facebook.com/photo/?fbid=" style="flex: 1; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--divider); background: var(--card2); color: var(--text-1); font-size: 12px; outline: none; transition: border-color 150ms ease;" />
+            <button id="hl-blocked-add-btn" style="padding: 6px 12px; border-radius: 8px; border: none; background: var(--accent); color: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer; transition: background-color 150ms ease; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);">Add</button>
+          </div>
+          <div class="hl-blocked-list" id="hl-blocked-list">
+            <span class="hl-no-blocked">No blocked sites</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ABOUT DEVELOPER MODAL -->
+  <div id="hl-about-modal" class="hl-modal">
+    <div class="hl-modal-content">
+      
+      <!-- Close button positioned absolutely top right -->
+      <button id="hl-about-close" class="hl-modal-close" title="Close about popup">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <!-- App Branding -->
+      <div class="hl-modal-brand">
+        <img src="hoverlens-icon.png" class="hl-modal-logo" alt="Image Zoom+" />
+        <h1 class="hl-modal-title">Image Zoom+</h1>
+        <p class="hl-modal-subtitle">All in One Hover Previewer</p>
+        <span class="hl-modal-version-badge">v1.0</span>
+      </div>
+
+      <div class="hl-modal-divider"></div>
+
+      <!-- Developer Info -->
+      <div class="hl-modal-dev">
+        <span class="hl-modal-dev-label">DEVELOPER</span>
+        <h2 class="hl-modal-dev-name">Kojak Eugenio</h2>
+        <p class="hl-modal-dev-msg">Have concerns or suggestions? Reach out anytime!</p>
+      </div>
+
+      <div class="hl-modal-divider"></div>
+
+      <!-- Contact Links List -->
+      <div class="hl-modal-links">
+        <a class="hl-modal-link-item" href="mailto:kojakeugenio@gmail.com" title="Email Jumar">
+          <div class="hl-modal-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="hl-modal-link-content">
+            <span class="hl-modal-link-title">Email</span>
+            <span class="hl-modal-link-val">kojakeugenio@gmail.com</span>
+          </div>
+        </a>
+
+        <a class="hl-modal-link-item" href="https://mediamentions.net" target="_blank" rel="noopener noreferrer" title="Visit Website">
+          <div class="hl-modal-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="hl-modal-link-content">
+            <span class="hl-modal-link-title">Website</span>
+            <span class="hl-modal-link-val">mediamentions.net</span>
+          </div>
+        </a>
+
+        <a class="hl-modal-link-item" href="https://www.facebook.com/snowden.presso/" target="_blank" rel="noopener noreferrer" title="Visit Facebook Profile">
+          <div class="hl-modal-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </div>
+          <div class="hl-modal-link-content">
+            <span class="hl-modal-link-title">Facebook</span>
+            <span class="hl-modal-link-val">snowden.presso</span>
+          </div>
+        </a>
+
+        <a class="hl-modal-link-item" href="https://github.com/kojakeugenio" target="_blank" rel="noopener noreferrer" title="View GitHub Profile">
+          <div class="hl-modal-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          </div>
+          <div class="hl-modal-link-content">
+            <span class="hl-modal-link-title">GitHub</span>
+            <span class="hl-modal-link-val">kojakeugenio</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="hl-modal-divider"></div>
+
+      <!-- Footer tag -->
+      <div class="hl-modal-footer">
+        Built for FREE for the community!
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="hl-footer">
+    <span class="hl-version">Image Zoom+ v1.0.0</span>
+    <button class="hl-reset-btn" id="hl-reset-btn">Reset defaults</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
